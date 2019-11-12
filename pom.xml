@@ -30,7 +30,7 @@
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
-      <version>3.3.6</version>
+      <version>3.4.14</version>
       <exclusions>
         <!--把无法下载的包排除 貌似没用到-->
         <exclusion>
