@@ -1,4 +1,4 @@
-package com.ztx.study.rpc;
+package com.ztx.study.comm;
 
 import java.io.Serializable;
 

@@ -1,8 +1,10 @@
-package com.ztx.study.zk;
+package com.ztx.study.tools;
 
+import com.sun.istack.internal.NotNull;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -57,12 +59,11 @@ public class ZkTools implements Watcher {
             StringBuilder builder=new StringBuilder();
             for (int i = 0; i < split.length-1; i++) {
                 builder.append("/").append(split[i]);
-                System.out.println(builder);
                 if (existsNode(builder.toString()) == null) {
                     this.zk.create(builder.toString(), null, ZooDefs.Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT);
                 }
             }
-            this.zk.create(path, data.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT);
+            this.zk.create(path, CommUtils.nvl(data,"").getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT);
         } catch (KeeperException |InterruptedException e) {
             e.printStackTrace();
         }
@@ -86,19 +87,22 @@ public class ZkTools implements Watcher {
         }
     }
 
-    public void deleteAll(String Path){
-        if (existsNode(Path) != null) {
-            List<String> children = getChildren(Path);
-            System.out.println(children.toString());
-            if (children.size()==0) {
-                deleteNode(Path);
-            }else {
+    public void deleteAll() {
+        deleteAll(PARENT_PATH);
+    }
+
+    public void deleteAll(String path){
+        if (existsNode(path) != null) {
+            List<String> children = getChildren(path);
+            if (children == null) {
+                deleteNode(path);
+            } else {
                 for (String child : children) {
-                    String newPath = Path + "/" + child;
+                    String newPath = path + "/" + child;
                     System.out.println(newPath);
                     deleteAll(newPath);
                 }
-                deleteNode(Path);
+                deleteNode(path);
             }
         }
     }
@@ -117,7 +121,7 @@ public class ZkTools implements Watcher {
         return null;
     }
 
-    public Stat existsNode(String path) {
+    private Stat existsNode(String path) {
         try {
             return zk.exists(path, true);
         } catch (KeeperException |InterruptedException e) {
@@ -148,7 +152,6 @@ public class ZkTools implements Watcher {
                         case None:
                             System.out.println("----建立了zookeeper连接");
                             connectedSemaphore.countDown();
-                            //zk.getChildren("/",true);
                             break;
                         case NodeCreated:
                             System.out.println("----创建了新节点");
