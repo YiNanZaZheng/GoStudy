@@ -17,16 +17,6 @@ public class StudentJDBCTemplate implements StudentDao {
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplateObject;
     private PlatformTransactionManager transactionManager;
-    @Autowired
-    private Student student;
-
-    public StudentJDBCTemplate(Student student) {
-        this.student=student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource=dataSource;

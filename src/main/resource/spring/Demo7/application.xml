@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+>
+       <context:component-scan base-package="com.ztx.spring.Demo7"/>
+       <bean id="student" class="com.ztx.spring.Demo7.entity.Student">
+              <property name="name" value="张三"/>
+              <property name="age" value="19"/>
+       </bean>
+
+       <aop:config>
+              <!--方便继续测试，修改此处的切面使其不执行-->
+              <aop:pointcut id="test" expression="execution(* *..Demo7..aet*(..))"/>
+              <aop:aspect ref="logging">
+                     <aop:before method="beforeAdvice" pointcut-ref="test"/>
+                     <aop:after method="afterAdvice" pointcut-ref="test"/>
+                     <aop:around method="aroundAdvice" pointcut-ref="test"/>
+                     <!--<aop:after-returning method="afterReturningAdvice" pointcut-ref="test"
+                                          arg-names="joinPoint,retValue"/>-->
+                     <aop:after-throwing method="afterThrowingAdvice" pointcut-ref="test" throwing="e"/>
+              </aop:aspect>
+       </aop:config>
+
+       <aop:config>
+              <aop:pointcut id="testParam1" expression="execution(* *..Demo7..set*(..))"/>
+              <aop:pointcut id="testParam2" expression="execution(* *..Demo7..set*(..)) and args(name,age)"/>
+              <aop:aspect ref="logging">
+                     <aop:before method="beforeAdvice1" pointcut-ref="testParam2" arg-names="name,age"/>
+              </aop:aspect>
+       </aop:config>
+</beans>

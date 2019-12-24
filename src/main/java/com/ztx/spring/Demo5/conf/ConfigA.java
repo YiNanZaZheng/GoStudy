@@ -9,11 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigA {
     @Bean
     public StudentJDBCTemplate studentJDBCTemplate(){
-        return new StudentJDBCTemplate(student());
-    }
-
-    @Bean
-    public Student student(){
-        return new Student();
+        return new StudentJDBCTemplate();
     }
 }
