@@ -30,6 +30,7 @@ public class StudentJDBCTemplate implements StudentDao {
     @Override
     public void create(String name, Integer age, Integer marks, Integer year) {
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+        definition.setIsolationLevel(3);
         TransactionStatus status = transactionManager.getTransaction(definition);
 
         try {
