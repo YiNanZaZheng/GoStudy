@@ -5,4 +5,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
        >
 
+       <bean id="car" class="com.ztx.customspring.Demo1.ioc.Car">
+              <property name="name" value="车车"/>
+              <property name="age" value="18"/>
+       </bean>
+
+       <bean id="Wheel" class="com.ztx.customspring.Demo1.ioc.Wheel"/>
 </beans>
