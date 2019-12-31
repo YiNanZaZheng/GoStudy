@@ -29,10 +29,16 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor, B
         }
         List<AspectJepressionPointcutAdvisor> advisors = xmlBeanFactory.getBeanForType(AspectJPointcutAdvisor.class);
         for (AspectJepressionPointcutAdvisor advisor : advisors) {
+            //判断类是否符合切面表达式
             if (advisor.getPointcut().getClassFilter().matchers(bean.getClass())) {
-
+                ProxyFactory advisedSupport = new ProxyFactory();
+                advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
+                advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
+                TargetSource targetSource = new TargetSource(bean.getClass(), bean.getClass().getInterfaces(), bean);
+                advisedSupport.setTargetSource(targetSource);
+                return advisedSupport.getProxy();
             }
-        }
+    }
         return bean;
     }
 
